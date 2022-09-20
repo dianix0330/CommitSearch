@@ -25,12 +25,12 @@ const MainPage = () => {
         <label htmlFor="repo">Repository:</label>
         <input
           type="text"
-          className="main__ccontent__input"
+          className="main__content__input"
           id="repo"
           onChange={(e) => setRepoTitle(e.target.value)}
         ></input>
       </div>
-      <button type="button" className="content__submit" onClick={handleClick}>
+      <button type="button" className="main__content__submit" onClick={handleClick}>
         Commit Show
       </button>
     </form>

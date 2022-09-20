@@ -34,13 +34,13 @@
   text-align: center;
 }
 
-.content__submit:hover,
-.content__submit:active {
+.main__content__submit:hover,
+.main__content__submit:active {
   background-color: white;
   background-position: 0 0;
   color: #FF4742;
 }
 
-.content__submit:active {
+.main__content__submit:active {
   opacity: .5;
 }

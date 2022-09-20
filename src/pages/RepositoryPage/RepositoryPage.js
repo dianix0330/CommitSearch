@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { RepositoryItem } from "../../components";
@@ -7,24 +8,40 @@ import "./style.css";
 
 const RepositoryPage = () => {
   const { user, repo } = useParams();
-  const [repos, setRepos] = useState([]);
   const [showMore, setShowMore] = useState(false);
   const navigate = useNavigate();
 
-  const loadData = async () => {
+  // const loadData = async () => {
+  //   try {
+  //     const result = await getCommits(user, repo);
+  //     if(result.data.length === 0)
+  //     {
+  //       throw 'Empty Data'
+  //     }
+  //     setRepos(result.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //     navigate("/does/not/exist");
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   loadData();
+  // }, []);
+
+  const {isLoading, data} = useQuery('data', async () => {
     try {
       const result = await getCommits(user, repo);
-      setRepos(result.data);
+      if(result.data.length === 0)
+      {
+        throw 'Empty Data'
+      }
+      return result.data;
     } catch (error) {
       console.log(error);
       navigate("/does/not/exist");
     }
-  };
-
-  useEffect(() => {
-    loadData();
-  }, []);
-
+  })
   return (
     <div className="repository">
       <div className="repository__title">
@@ -33,13 +50,17 @@ const RepositoryPage = () => {
           Showing results for /{user}/{repo}
         </h2>
       </div>
-      <div className={`repository__content ${showMore ? "" : "show--less"}`}>
-        {repos.map((repo) => (
+      {isLoading ? (
+         <div>Loading...</div>
+       ) : (
+      <div className={`repository__content ${showMore ? "" : "show-less"}`}>
+        {data.map((repo) => (
           <RepositoryItem key={repo.sha} {...repo} />
         ))}
       </div>
+       )}
       <div className="repository__button">
-        <button className="button--load" onClick={() => setShowMore(true)}>
+        <button className={`button--load ${showMore === true ? 'load-hide' : ''}`} onClick={() => setShowMore(true)}>
           Load More
         </button>
       </div>
